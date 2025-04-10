@@ -15,7 +15,7 @@ namespace WEXO.Controllers
 			_movieService = movieService;
 		}
 
-		[HttpGet("movies")]
+		[HttpGet("api/movies")]
 		public async Task<MovieResponse> Get(int? pageNumber = null)
 		{
 			pageNumber ??= 1;
@@ -23,10 +23,23 @@ namespace WEXO.Controllers
 			MovieResponse currentPageMovies = new MovieResponse();
 
 			string result = await _movieService.GetMovies(pageNumber);
-			currentPageMovies = JsonConvert.DeserializeObject<MovieResponse>(result);
+            Console.WriteLine(result); // This is the full JSON from the API
+
+            currentPageMovies = JsonConvert.DeserializeObject<MovieResponse>(result);
 
 			return currentPageMovies;
 		}
 
-	}
+        [HttpGet("api/movie/{movieId}")]
+        public async Task<Movie> GetMovieDetails(string movieId)
+        {
+            string result = await _movieService.GetMovieDetails(movieId);
+            Console.WriteLine(result); // This is the full JSON from the API
+
+            Movie movieDetails = JsonConvert.DeserializeObject<Movie>(result);
+
+            return movieDetails;
+        }
+
+    }
 }

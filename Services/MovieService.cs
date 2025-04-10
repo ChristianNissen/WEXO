@@ -33,9 +33,27 @@ namespace WEXO.Services
 				Console.WriteLine(body);
 				return body;
 			}
-
-			
-
 		}
+
+		public async Task<string> GetMovieDetails(string movieId)
+		{
+            var client = new HttpClient();
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri($"https://api.themoviedb.org/3/movie/{movieId}"),
+                Headers =
+				{
+					{ "accept", "application/json" },
+				},
+            };
+            using (var response = await client.SendAsync(request))
+            {
+                response.EnsureSuccessStatusCode();
+                var body = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(body);
+				return body;
+            }
+        }
 	}
 }
