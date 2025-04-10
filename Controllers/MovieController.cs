@@ -34,6 +34,7 @@ namespace WEXO.Controllers
         public async Task<Movie> GetMovieDetails(int movieId)
         {
             string result = await _movieService.GetMovieDetails(movieId);
+			Console.WriteLine("MOVIE DETAILS! _____________________________________");
             Console.WriteLine(result); // This is the full JSON from the API
 
             Movie movieDetails = JsonConvert.DeserializeObject<Movie>(result);

@@ -10,11 +10,11 @@ namespace WEXO.Models
 		public string Title { get; set; }
 		public string Genre { get; set; }
 		[JsonProperty("release_date")]
-		public string ReleaseDate { get; set; }
+		public string release_date { get; set; }
 		public string Director { get; set; }
 		public List<string> Actors { get; set; }
 		[JsonProperty("overview")]
-		public string Description { get; set; }
+		public string overview { get; set; }
 		[JsonProperty("poster_path")]
 		public string poster_path { get; set; }
 		public string Backdrop { get; set; }
