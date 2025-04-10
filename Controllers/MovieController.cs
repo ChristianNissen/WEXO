@@ -31,7 +31,7 @@ namespace WEXO.Controllers
 		}
 
         [HttpGet("api/movie/{movieId}")]
-        public async Task<Movie> GetMovieDetails(string movieId)
+        public async Task<Movie> GetMovieDetails(int movieId)
         {
             string result = await _movieService.GetMovieDetails(movieId);
             Console.WriteLine(result); // This is the full JSON from the API

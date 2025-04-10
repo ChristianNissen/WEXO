@@ -35,7 +35,7 @@ namespace WEXO.Services
 			}
 		}
 
-		public async Task<string> GetMovieDetails(string movieId)
+		public async Task<string> GetMovieDetails(int movieId)
 		{
             var client = new HttpClient();
             var request = new HttpRequestMessage
@@ -45,7 +45,8 @@ namespace WEXO.Services
                 Headers =
 				{
 					{ "accept", "application/json" },
-				},
+                    { "Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwYTI4YWJjZThhZjBjNzQyZjM4Y2Q2MGI1NGY2MzcyNiIsIm5iZiI6MTc0MzUzMjEwNi4yMzgwMDAyLCJzdWIiOiI2N2VjMzA0YTE5ZjFiMWNiNGVmYTBjODciLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.80ccqlHfNWRkItT3xie61-hxGRpqPa4sCYO_ALpj2yM" },
+                },
             };
             using (var response = await client.SendAsync(request))
             {
