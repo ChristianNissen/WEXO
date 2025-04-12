@@ -1,0 +1,147 @@
+﻿@page "/movie/{MovieId:int}"
+@using WEXO.Models
+@inject HttpClient Client
+
+<h1>Movie Details</h1>
+
+@if (movie == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="movie-details">
+        <h2>@movie.Title</h2>
+        <img src="@("https://image.tmdb.org/t/p/w500" + movie.poster_path)" alt="@movie.Title" class="movie-cover" />
+
+        <div class="details-info">
+            <p><strong>Release Date:</strong> @movie.release_date</p>
+            <p><strong>Genre:</strong> @movie.Genre</p>
+            <p><strong>Director:</strong> @movie.Director</p>
+            <p><strong>Overview:</strong> @movie.overview</p>
+            <h4>Cast:</h4>
+            <ul>
+                @if (movie.Actors != null && movie.Actors.Any())
+                {
+                    @foreach (var actor in movie.Actors)
+                    {
+                        <li>@actor</li>
+                    }
+                }
+                else
+                {
+                    <p>No actors available.</p>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+<style>
+    body {
+        background-color: #141414;
+        color: #ffffff;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1, h2, h4 {
+        color: #ffffff;
+        margin-bottom: 10px;
+    }
+
+    .movie-details {
+        display: flex;
+        flex-direction: row;
+        gap: 30px;
+        padding: 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: #1c1c1c;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+    }
+
+    .movie-cover {
+        width: 300px;
+        border-radius: 4px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+    }
+
+    .details-info {
+        flex: 1;
+    }
+
+        .details-info p {
+            margin: 10px 0;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .details-info strong {
+            color: #b3b3b3;
+            font-weight: bold;
+        }
+
+    ul {
+        padding-left: 20px;
+        list-style: none;
+    }
+
+        ul li::before {
+            content: '●';
+            color: #e50914;
+            margin-right: 10px;
+        }
+
+        ul li {
+            margin-bottom: 5px;
+            font-size: 15px;
+        }
+
+    p {
+        font-size: 15px;
+        color: #dddddd;
+    }
+
+    .loading {
+        text-align: center;
+        font-size: 18px;
+        padding: 50px;
+    }
+
+
+</style>
+
+
+
+@code {
+    [Parameter]
+    public int MovieId { get; set; }
+
+    private Movie movie;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Console.WriteLine($"Movieid: {MovieId}");
+
+            movie = await Client.GetFromJsonAsync<Movie>($"https://localhost:7030/api/movie/{MovieId}");
+
+            if (movie == null)
+            {
+                Console.WriteLine("No response");
+            }
+            else
+            {
+                Console.WriteLine($"Movie details: {movie.Title}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+}

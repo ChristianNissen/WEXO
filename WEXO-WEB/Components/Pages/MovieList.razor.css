@@ -1,0 +1,63 @@
+﻿
+body {
+    font-family: Arial, sans-serif;
+    background-color: #141414; /* Dark background similar to Netflix */
+    color: white;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+/* Movie list container - grid style */
+.movie-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Auto adjusts grid based on screen size */
+    gap: 20px;
+    justify-items: center;
+    background-color: #141414;
+    padding: 20px;
+}
+
+/* Movie card container */
+.movie-card {
+    position: relative;
+    width: 100%;
+    max-width: 200px;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease-in-out;
+}
+
+    .movie-card:hover {
+        transform: scale(1.05); /* Hover effect */
+    }
+
+/* Movie image */
+.movie-cover {
+    width: 100%;
+    height: 300px;
+    object-fit: cover; /* Ensures image covers the entire div */
+    border-radius: 10px;
+}
+
+/* Movie info */
+.movie-info {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent background for text */
+    border-radius: 0 0 10px 10px;
+    text-align: center;
+}
+
+    .movie-info h3 {
+        font-size: 1.2rem;
+        margin: 0;
+    }

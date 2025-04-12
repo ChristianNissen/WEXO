@@ -1,0 +1,14 @@
+﻿@page "/a"
+@inject NavigationManager Navigation
+
+<h3>Redirecting to movies...</h3>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Navigation.NavigateTo("/movies/1");
+        }
+    }
+}

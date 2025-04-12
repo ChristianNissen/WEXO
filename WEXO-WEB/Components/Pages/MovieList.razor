@@ -1,0 +1,164 @@
+﻿@page "/"
+@page "/movies/{pageNumber:int}"
+@using WEXO.Models
+@inject HttpClient Client
+@inject NavigationManager Navigation
+
+<h1>Movies</h1>
+
+@if (movies == null || !movies.Any())
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="movie-list">
+        @foreach (var movie in movies)
+        {
+            <div class="movie-card" @key="movie.Id">
+                <a href="/movie/@movie.Id">
+                    <p>@movie.Title</p>
+                    <img src="@("https://image.tmdb.org/t/p/w500" + movie.poster_path)" alt="@movie.Title" />
+                </a>
+            </div>
+        }
+    </div>
+}
+
+<div class="pagination">
+    <button @onclick="NavigateToPreviousPage" disabled="@(!CanGoPrevious)">Previous</button>
+    <span>Page @pageNumber</span>
+    <button @onclick="NavigateToNextPage" disabled="@(!CanGoNext)">Next</button>
+</div>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #141414;
+        color: white;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 3rem;
+        margin-bottom: 20px;
+    }
+
+    .movie-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+        justify-items: center;
+        background-color: #141414;
+        padding: 20px;
+    }
+
+    .movie-card {
+        position: relative;
+        width: 100%;
+        max-width: 400px;
+        height: 400px;
+        overflow: hidden;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(86, 86, 86, 0.5);
+        transition: transform 0.3s ease-in-out;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+        .movie-card:hover {
+            transform: scale(1.05);
+        }
+
+    .movie-info {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        padding: 10px;
+        background: rgba(86, 86, 86, 0.6);
+        border-radius: 0 0 10px 10px;
+        z-index: 1;
+        text-align: center;
+        color: white;
+    }
+
+    .pagination {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .nav-button {
+        background-color: #e50914;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+        margin: 0 10px;
+    }
+
+        .nav-button:hover:enabled {
+            background-color: #f40612;
+        }
+
+        .nav-button:disabled {
+            opacity: 0.4;
+            cursor: default;
+        }
+</style>
+
+@code {
+    [Parameter]
+    public int? pageNumber { get; set; }
+
+    private List<Movie> movies;
+
+    private const int MoviesPerPage = 20;
+    private int currentPage => pageNumber ?? 1;
+
+    private bool CanGoNext => currentPage < 5;
+    private bool CanGoPrevious => currentPage > 1;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadMovies(currentPage);
+    }
+
+    private async Task LoadMovies(int page)
+    {
+        try
+        {
+            var movieResponse = await Client.GetFromJsonAsync<List<Movie>>($"https://localhost:7030/api/movies/{page}");
+            movies = movieResponse ?? new List<Movie>();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error:  {ex.Message}");
+            movies = new List<Movie>();
+        }
+    }
+
+    private void NavigateToNextPage()
+    {
+        if (CanGoNext)
+        {
+            Navigation.NavigateTo($"/movies/{currentPage + 1}");
+        }
+    }
+
+    private void NavigateToPreviousPage()
+    {
+        if (CanGoPrevious)
+        {
+            Navigation.NavigateTo($"/movies/{currentPage - 1}");
+        }
+    }
+}
+
+    }
+}
